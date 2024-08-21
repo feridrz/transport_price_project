@@ -24,9 +24,12 @@ class TransportController extends Controller
             return $this->errorResponse('One or more addresses not found in database', 404);
         }
 
-        // total distance
-        $distance = $distanceService->calculateTotalDistance($addresses);
-
+        try {
+            // total distance
+            $distance = $distanceService->calculateTotalDistance($addresses);
+        } catch (\RuntimeException $e) {
+            return $this->errorResponse('Distance calculation failed', 500);
+        }
         // prices
         $prices = $pricingService->calculatePrices($distance);
 

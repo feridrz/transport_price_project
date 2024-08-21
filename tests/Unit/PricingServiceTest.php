@@ -11,9 +11,8 @@ class PricingServiceTest extends TestCase
 {
     public function test_calculate_prices()
     {
-        $distance = 100; // 100 km
+        $distance = 100;
 
-        // Mock the VehicleRepository
         $vehicleRepository = Mockery::mock(VehicleRepository::class);
         $vehicleRepository->shouldReceive('getAll')
             ->andReturn([
@@ -21,16 +20,13 @@ class PricingServiceTest extends TestCase
                 ['number' => 1, 'cost_km' => 2, 'minimum' => 200]
             ]);
 
-        // Create the PricingService with the mocked VehicleRepository
         $pricingService = new PricingService($vehicleRepository);
 
-        // Calculate prices
         $prices = $pricingService->calculatePrices($distance);
 
-        // Assert that the prices are calculated correctly
         $this->assertEquals([
-            ['vehicle_type' => 0, 'price' => 100], // 100 km * 1 cost/km
-            ['vehicle_type' => 1, 'price' => 200]  // 100 km * 2 cost/km but minimum price is 200
+            ['vehicle_type' => 0, 'price' => 100],
+            ['vehicle_type' => 1, 'price' => 200]
         ], $prices);
     }
 }
